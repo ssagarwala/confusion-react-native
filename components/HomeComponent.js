@@ -12,8 +12,7 @@ function RenderItem (props){
             <Card 
                 featuredTitle = {item.name}
                 featuredSubtitle={item.designation}
-                image={require('./images/uthapizza.png')}
-
+                image={require('./images/uthappizza.png')}
             >
                 <Text style={{margin:10}}>
                     {item.description}
@@ -31,7 +30,7 @@ class Home extends Component {
     constructor(props){
         super(props);
         this.state={
-            dishes=DISHES,
+            dishes: DISHES,
             promotions: PROMOTIONS,
             leaders:LEADERS
         }
@@ -46,7 +45,7 @@ class Home extends Component {
            <ScrollView>
                 <RenderItem 
                     item={this.state.dishes.filter((dish)=>dish.featured)[0]}
-                    />
+                    />p
                 <RenderItem 
                     item={this.state.promotions.filter((promo)=>promo.featured)[0]}
                     />
