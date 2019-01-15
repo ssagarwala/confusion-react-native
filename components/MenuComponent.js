@@ -8,7 +8,7 @@ class  Menu extends Component{
         super(props);
         this.state={
             dishes: DISHES
-        }
+        };
     }
 
     static navigationOptions ={
