@@ -60,7 +60,7 @@ const MainNavigator = createDrawerNavigator({
 class Main extends Component{
         render(){
             return (
-                <View>
+                <View style={{flex:1, paddingTop: Platform.OS === 'ios' ? 0 : expo.Constants.statusBarHeight}}>
                     <MainNavigator />
                 </View>
             )
