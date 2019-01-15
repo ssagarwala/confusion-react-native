@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Menu from './MenuComponent';
 import Home from './HomeComponent';
 import Dishdetail from './DishdetailComponent';
+import About from './AboutComponent';
 import Contact from './ContactComponent';
 import { View, Platform } from 'react-native';
 import { createStackNavigator,createDrawerNavigator } from 'react-navigation';
@@ -91,7 +92,7 @@ const MainNavigator = createDrawerNavigator({
         }
     },
     About: {
-        screen:ContactNavigator,
+        screen:AboutNavigator,
         navigationOptions:{
             title: 'About',
             drawerLabel: 'About'
