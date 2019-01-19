@@ -1,5 +1,5 @@
 import * as ActionTypes from './ActionTypes';
-import { baseUrl } from './shared/baseUrl';
+import { baseUrl } from '../shared/baseUrl';
 
 export const fetchComments = ()=> (dispatch) => {
             return fetch(baseUrl + 'comments')
@@ -102,7 +102,7 @@ export const promosFailed = (errmess) =>({
         payload:errmess
 
 });
-export const addDishes= (promos) => ({
+export const addPromos= (promos) => ({
         type:ActionTypes.ADD_PROMOS,
         payload:promos
 });
