@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList} from 'react-native';
+import { View, Text, ScrollView, FlatList} from 'react-native';
 import { ListItem, Card } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';

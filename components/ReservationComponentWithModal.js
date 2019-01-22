@@ -100,11 +100,11 @@ class Reservation extends Component{
                 </View>
                 <Modal animationType = {"slide"} transparent={false}
                     visible={this.state.showModal}
-                    >
+                    onDismiss ={()=>this.toggleModal()}>
                     <View style = {styles.modal}>
                         <Text style={styles.modalTitle}> Your Reservation</Text>
                         <Text style={styles.modalText}> Number of Guests: {this.state.guests} </Text>
-                        <Text style={styles.modalText}> Smoking ? : {this.state.smoking ? 'Yes': 'No'}</Text>
+                        <Text style={styles.modalText}> Smoking ? : {this.state.smoking}</Text>
                         <Text style={styles.modalText}> Date and Time: {this.state.date}</Text>
                         
                         <Button onPress = {()=> {this.toggleModal();this.resetForm();}}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
             justifyContent: 'center',
             flex:1,
             flexDirection: 'row',
-            margin:5
+            margin:20
         },
         formLabel: {
             fontSize:18,
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
             fontSize:18,
             margin:10
         }
+
 });
 
 export default Reservation;
