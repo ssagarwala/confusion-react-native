@@ -3,7 +3,7 @@ import { View, Text, ScrollView, FlatList, Modal, StyleSheet} from 'react-native
 import { Card, Button} from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { postFavorite, postComment } from '../redux/ActionCreators';
+import { postFavorite } from '../redux/ActionCreators';
 import { Rating } from 'react-native-elements';
 import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -102,7 +102,7 @@ class Dishdetail extends Component{
         super(props);
         this.state = {            
             showModal:false,
-            rating:'',
+            rating:0,
             author:'',
             comment:''
         }
@@ -114,37 +114,25 @@ class Dishdetail extends Component{
         this.props.postFavorite(dishId);
     }
     handleComment(dishId, rating, author, comment){
-        console.log(JSON.stringify(this.state));
-        console.log("dishiD in handleComment " +dishId);
-        
-        this.props.postComment(dishId,rating,author, comment);    
-        this.toggleModal();
+
+        this.props.postComment(dishId, rating, author, comment);
     }
     handleCancel(){
-        this.setState({
-            showModal:false,
-            rating:0,         
-            author:'',
-            comment:'',
-            showModal:false
-          });       
+        toggleModal();
+        
     }
 
     static navigationOptions = {
         title: 'Dish Details'
     };
-//<!-- Now the plus here means that since this
-//will be a string here I am going to turn that in to a number.
+
     render(){
         const dishId = this.props.navigation.getParam('dishId','');
-        //const dishIdInt = parseInt(dishId, 10);
-        console.log("Type of " , (typeof dishId));
         return (
             <ScrollView>
-                
                 <RenderDish dish={this.props.dishes.dishes[+dishId]} 
                             favorite={this.props.favorites.some(el =>el === dishId)}
-                            onPress={()=>this.markFavorite(dishId)} onClick={()=>{this.toggleModal();}}/>
+                            onPress={()=>this.markFavorite(dishId)} onClick={()=>this.toggleModal()}/>
                 <RenderComments comments={this.props.comments.comments.filter((comment)=>comment.dishId === dishId)} />
             
                 <Modal animationType = {"slide"} transparent={false}
@@ -157,13 +145,14 @@ class Dishdetail extends Component{
                         startingValue={1}
                         ratingCount= {5}
                         imageSize={40}
-                        onFinishRating={(ratingCount)=>{this.setState({rating:ratingCount.toString()})}}
+                        onFinishRating={this.rating}
                         onStartRating={this.ratingStarted}
                         style={{ paddingVertical: 10 }}                        
                         />
                     </View>
+
                     <View style={styles.formRow}>
-                        <Input  placeholder='Author' 
+                        <Input  placeholder='Author`' 
                                 name="author"
                                 leftIcon={
                                     <Icon
@@ -172,7 +161,7 @@ class Dishdetail extends Component{
                                     color='black'
                                     />
                                 }
-                              onChangeText={(text) => this.setState({author:text})}                          
+                              onChangeText={(text) => this.setState({text})}                          
                         />              
                     </View>
                     <View style={styles.formRow}>
@@ -182,18 +171,13 @@ class Dishdetail extends Component{
                                 <Icon
                                     name='comment' size={24} color='black' />
                                 }
-                                onChangeText={(text) => this.setState({comment:text})}
                                 
                         />
                     </View>
-
-        
                     <View style={styles.formRow}>
                         <Button
                                 title='SUBMIT'
-                                onPress={()=>{
-                                    console.log("dishiD in submit " +dishId);
-                                    this.handleComment(dishId, this.state.rating, this.state.author, this.state.comment)}}
+                                onPress={()=>this.handleComment(dishId, rating, author, comment)} 
                                 raised ={true}
                                 buttonStyle={{
                                     backgroundColor: "#512DA8",
@@ -210,7 +194,7 @@ class Dishdetail extends Component{
                                 title='CANCEL'                               
                                 onPress={()=>this.handleCancel()} 
                                 buttonStyle={{
-                                    backgroundColor:"rgb(72,72,72) ",
+                                    backgroundColor: "rgb(72,72,72) ",
                                     width: 300,
                                     height: 45                                    
                                   }}

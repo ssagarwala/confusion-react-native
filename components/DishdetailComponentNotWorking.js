@@ -102,9 +102,10 @@ class Dishdetail extends Component{
         super(props);
         this.state = {            
             showModal:false,
-            rating:'',
+            rating:0,
             author:'',
-            comment:''
+            comment:'',
+            dishId:''
         }
     }
     toggleModal(){
@@ -115,15 +116,13 @@ class Dishdetail extends Component{
     }
     handleComment(dishId, rating, author, comment){
         console.log(JSON.stringify(this.state));
-        console.log("dishiD in handleComment " +dishId);
-        
-        this.props.postComment(dishId,rating,author, comment);    
+        this.props.postComment(dishId, rating,author, comment);    
         this.toggleModal();
     }
     handleCancel(){
         this.setState({
             showModal:false,
-            rating:0,         
+            rating:0,
             author:'',
             comment:'',
             showModal:false
@@ -138,14 +137,13 @@ class Dishdetail extends Component{
     render(){
         const dishId = this.props.navigation.getParam('dishId','');
         //const dishIdInt = parseInt(dishId, 10);
-        console.log("Type of " , (typeof dishId));
         return (
             <ScrollView>
                 
                 <RenderDish dish={this.props.dishes.dishes[+dishId]} 
                             favorite={this.props.favorites.some(el =>el === dishId)}
-                            onPress={()=>this.markFavorite(dishId)} onClick={()=>{this.toggleModal();}}/>
-                <RenderComments comments={this.props.comments.comments.filter((comment)=>comment.dishId === dishId)} />
+                            onPress={()=>this.markFavorite(dishId)} onClick={()=>{this.toggleModal();  this.setState({dishId: dishId})}}/>
+                <RenderComments comments={this.props.comments.comments.filter((comment)=>comment.dishId == dishId)} />
             
                 <Modal animationType = {"slide"} transparent={false}
                         visible={this.state.showModal}>
@@ -157,13 +155,13 @@ class Dishdetail extends Component{
                         startingValue={1}
                         ratingCount= {5}
                         imageSize={40}
-                        onFinishRating={(ratingCount)=>{this.setState({rating:ratingCount.toString()})}}
+                        onFinishRating={(ratingCount)=>{this.setState({rating:ratingCount})}}
                         onStartRating={this.ratingStarted}
                         style={{ paddingVertical: 10 }}                        
                         />
                     </View>
                     <View style={styles.formRow}>
-                        <Input  placeholder='Author' 
+                        <Input  placeholder='Author`' 
                                 name="author"
                                 leftIcon={
                                     <Icon
@@ -192,8 +190,8 @@ class Dishdetail extends Component{
                         <Button
                                 title='SUBMIT'
                                 onPress={()=>{
-                                    console.log("dishiD in submit " +dishId);
-                                    this.handleComment(dishId, this.state.rating, this.state.author, this.state.comment)}}
+                                   
+                                    this.handleComment(this.state.dishId, this.state.rating, this.state.author, this.state.comment)}}
                                 raised ={true}
                                 buttonStyle={{
                                     backgroundColor: "#512DA8",
