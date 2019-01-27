@@ -168,7 +168,11 @@ class Dishdetail extends Component{
                                 leftIcon={
                                     <Icon
                                     name='user'
-                                    size={24}
+                                    
+                                    
+                                    
+                                    
+                                    ize={24}
                                     color='black'
                                     />
                                 }
