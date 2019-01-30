@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList, Modal, StyleSheet} from 'react-native';
+import { View, Text, ScrollView, FlatList, Modal, StyleSheet,Alert, PanResponder } from 'react-native';
 import { Card, Button} from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -25,11 +25,45 @@ const mapDispatchToProps = dispatch => ({
 
 
 function RenderDish(props){
+    const recognizeDrag = ({moveX, moveY, dx, dy}) =>{
+        if(dx <  -200)
+            return true;
+        else
+            return false;
 
+    };
+    const panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: (e, gestureState) =>{
+                return true;
+            },
+            onPanResponderEnd: (e, gestureState) => {
+                if(recognizeDrag(gestureState))
+                    Alert.alert(
+                        'Add to Favorites?',
+                        'Are you sure you wish to add '+ dish.name+ 'to your favorites',
+                        [
+                            {
+                                text:'Cancel',
+                                onPress:() => console.log('Cancel pressed'),
+                                style:'cancel'
+                            },
+                            {
+                                text: 'OK',
+                                onPress: ()=>()=>props.favorite ? console.log('Already favorite'): props.onPress()                              
+                            }
+                        ],
+                        {cancelable:false}
+                        
+                    );                 
+                return true;
+            }
+    });
     const dish = props.dish;
     if(dish!= null){
         return(
-            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}
+            {...panResponder.panHandlers}
+            >
             <Card 
                 featuredTitle={dish.name}
                 image = {{uri: baseUrl + dish.image}}
@@ -85,7 +119,8 @@ function RenderComments(props){
     }
 
     return(
-        <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
+        <Animatable.View animation="fadeInUp" duration={2000} delay={1000}
+                        >
         <Card title="Comments">
             <FlatList
                 data={comments}
@@ -168,12 +203,8 @@ class Dishdetail extends Component{
                                 name="author"
                                 leftIcon={
                                     <Icon
-                                    name='user'
-                                    
-                                    
-                                    
-                                    
-                                    ize={24}
+                                    name='user' 
+                                    Size={24}
                                     color='black'
                                     />
                                 }
