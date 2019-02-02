@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal, Alert } from 'react-native';
 import { Card } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 
 class Reservation extends Component{
+   
     constructor(props){
         super(props);
         this.state = {
@@ -37,8 +38,11 @@ class Reservation extends Component{
 
 
     render(){
+        let guestNumber = this.state.guests;
+        let smokingYN = this.state.smoking;
+        let dateSet = this.state.date;
         return (
-            
+       
             <ScrollView>
                 <View style={styles.formRow}>
                     <Text style={styles.formLabel}>Number of Guests </Text>
@@ -94,25 +98,28 @@ class Reservation extends Component{
                    <Button
                         title='Reserve'
                         color='#512DA8'
-                        onPress={()=>this.handleReservation()} 
+                        onPress={()=>{
+                                Alert.alert(
+                                'Your Reservation OK? \n',
+                                'Number of Guests: ' +guestNumber+'\nSmoking ? : '+ smokingYN + '\nDate and Time:' +dateSet,
+                                [
+                                    {
+                                        text:'Cancel',
+                                        onPress:() => this.resetForm(),
+                                        style:'cancel'
+                                    },
+                                    {
+                                        text: 'OK',
+                                        onPress: ()=>this.resetForm(),
+                                    }
+                                ],
+                                {cancelable:false}                                
+                                )
+                        }}
                         accessibilityLabel='Learn more about this purple button' 
                     />       
                 </View>
-                <Modal animationType = {"slide"} transparent={false}
-                    visible={this.state.showModal}
-                    >
-                    <View style = {styles.modal}>
-                        <Text style={styles.modalTitle}> Your Reservation</Text>
-                        <Text style={styles.modalText}> Number of Guests: {this.state.guests} </Text>
-                        <Text style={styles.modalText}> Smoking ? : {this.state.smoking ? 'Yes': 'No'}</Text>
-                        <Text style={styles.modalText}> Date and Time: {this.state.date}</Text>
-                        
-                        <Button onPress = {()=> {this.toggleModal();this.resetForm();}}
-                                color="#512DA8"
-                                title="Close"
-                        />                
-                    </View>            
-                </Modal>
+                
             </ScrollView>
         );
     }
@@ -152,3 +159,20 @@ const styles = StyleSheet.create({
 });
 
 export default Reservation;
+/*
+<Modal animationType = {"slide"} transparent={false}
+                    visible={this.state.showModal}
+                    >
+                    <View style = {styles.modal}>
+                        <Text style={styles.modalTitle}> Your Reservation</Text>
+                        <Text style={styles.modalText}> Number of Guests: {this.state.guests} </Text>
+                        <Text style={styles.modalText}> Smoking ? : {this.state.smoking ? 'Yes': 'No'}</Text>
+                        <Text style={styles.modalText}> Date and Time: {this.state.date}</Text>
+                        
+                        <Button onPress = {()=> {this.toggleModal();this.resetForm();}}
+                                color="#512DA8"
+                                title="Close"
+                        />                
+                    </View>            
+                </Modal>
+*/

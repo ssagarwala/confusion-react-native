@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList, Modal, StyleSheet,Alert, PanResponder } from 'react-native';
+import { View, Text, ScrollView, FlatList, Modal, StyleSheet, Alert, PanResponder } from 'react-native';
 import { Card, Button} from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -34,6 +34,13 @@ function RenderDish(props){
             return false;
 
     };
+    const recognizeComment = ({moveX, moveY, dx, dy}) =>{
+        if(dx < 200)
+            return true;
+        else
+            return false;
+
+    };
     const panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (e, gestureState) =>{
                 return true;
@@ -43,7 +50,7 @@ function RenderDish(props){
                     .then(endState =>console.log(endState.finished ? 'finished': 'cancelled'))
             },
             onPanResponderEnd: (e, gestureState) => {
-                if(recognizeDrag(gestureState))
+                if(recognizeDrag(gestureState)|| recognizeComment(gestureState))
                     Alert.alert(
                         'Add to Favorites?',
                         'Are you sure you wish to add '+ dish.name+ 'to your favorites',
@@ -55,7 +62,7 @@ function RenderDish(props){
                             },
                             {
                                 text: 'OK',
-                                onPress: ()=>()=>props.favorite ? console.log('Already favorite'): props.onPress()                              
+                                onPress: ()=>{props.favorite ? console.log('Already favorite'): props.onPress()}                              
                             }
                         ],
                         {cancelable:false}
